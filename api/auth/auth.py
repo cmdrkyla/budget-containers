@@ -1,3 +1,5 @@
+import os
+import uuid
 from flask import abort, jsonify, request, session
 from datetime import timedelta
 
@@ -91,6 +93,5 @@ class Auth():
     # Generate token for storing as a cookie
     @classmethod
     def generate_token(self):
-        # Use the existing salt method to generate a long random token
-        return Password().generate_salt(64)
-
+        # We don't need anything fancy here, just unique and long
+        return str(uuid.uuid4()) + "-" + os.urandom(64).hex()
