@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 
+from auth.auth import Auth
 from auth.route import secure_route
 from functions import string_to_class
 

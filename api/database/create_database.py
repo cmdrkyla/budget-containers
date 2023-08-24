@@ -18,7 +18,8 @@ def create_default_user():
       user.email_address = "eadiek@gmail.com"
       user.name_first = "Kyla"
       user.name_last = "Eadie"
-      user.password_hash = "pbkdf2$sha256$150000$t2SfbLfZpq$b6096e2bb880bf507ea815a88271f08ba791321d1bdf4e72e3633437d60af3eb"
+      # password = 12345
+      user.password_hash = "$pbkdf2-sha256$50000$1ZrT.r.XEoKw1npPSQkhRA$B/j6Xq8NQyDGmMo9WQ1mgYlwTYULKWgfm7W/ATscCGk"
       db.session.add(user)
       db.session.commit()
       return user
