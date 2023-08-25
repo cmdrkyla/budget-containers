@@ -1,8 +1,7 @@
 from datetime import datetime
 from sys import modules
 
-# Models (all must be listed for routing)
-# Could possibly change to dynamic later
+from controllers.user import UserController
 
 
 # Datetime wrappers
@@ -16,5 +15,6 @@ def datetime_utcnow():
 def string_to_class(class_string:str):
     # Turn snake_case to HeadedCamelCase first 
     class_pieces = class_string.split("_")
-    class_name = "".join(piece.title() for piece in class_pieces)
-    return getattr(modules[__name__], class_name)
+    model_name = "".join(piece.title() for piece in class_pieces)
+    controller_name = model_name + "Controller"
+    return getattr(modules[__name__], controller_name)

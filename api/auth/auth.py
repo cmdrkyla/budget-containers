@@ -5,6 +5,7 @@ from datetime import timedelta
 
 from auth.password import Password
 from config import SESSION_TIMEOUT_MINUTES
+from database.database import db
 from functions import datetime_now, datetime_utcnow
 from models.user import User
 
@@ -17,8 +18,8 @@ class Auth():
     @classmethod
     def login(self):
         try:
-            email_address = request.form.get("email_address")
-            password = request.form.get("password")
+            email_address = request.form.get("email_address", None, str)
+            password = request.form.get("password", None, str)
             remember_me = request.form.get("remember_me", False, bool)
         except AttributeError:
             abort(400)
@@ -29,7 +30,8 @@ class Auth():
             if remember_me:
                 cookie_token = self.generate_token()
                 user.cookie_token = cookie_token
-                user.update(user.id)
+                db.session.add(user)
+                db.session.commit()
             else:
                 cookie_token = None
 
@@ -42,9 +44,7 @@ class Auth():
 
     @classmethod
     def logout(self):
-        # Update time to now (expired) to be safe
-        session["valid_until"] = datetime_utcnow()
-        session["cookie_token"] = ""
+        session["auth"] = None
         session.clear()
         return jsonify({"success": True})
 
@@ -53,17 +53,22 @@ class Auth():
     @classmethod
     def authenticate(self, email_address: str, password: str):
         # Find user by email
-        found_user = DB().storage().select_record_by_field(
-            "user", "email_address", email_address
-        )
+        try:
+            found_user = db.session.query(User).filter(
+                User.email_address == email_address,
+                User.deactivated_at == None,
+            ).one()
+        except:
+            return False
         
         # Validate the password
-        if Password.check_password(password, found_user["password_hash"]):
+        if Password.verify_password(password, found_user.password_hash):
             # Create the session
-            session["user_id"] = found_user["id"]
-            session["email_address"] = found_user["email_address"]
-            session["valid_until"] = self.valid_until()
-            return User.load_model(found_user)
+            session["auth"] = {}
+            session["auth"]["user_id"] = found_user.id
+            session["auth"]["email_address"] = found_user.email_address
+            session["auth"]["valid_until"] = self.valid_until()
+            return found_user
         else:
             return False
 
@@ -71,16 +76,15 @@ class Auth():
     # Check if user is logged in
     @classmethod
     def is_authenticated(self):
-        if "email_address" in session and "valid_until" in session:
+        if "auth" in session and "email_address" in session["auth"] and "valid_until" in session["auth"]:
             # Can't compare with utcnow, so we pass the timezone from the saved date
-            if session["valid_until"] > datetime_now(session["valid_until"].tzinfo):
+            if session["auth"]["valid_until"] > datetime_now(session["auth"]["valid_until"].tzinfo):
                 # Reset timeout
-                session["valid_until"] = self.valid_until()
+                session["auth"]["valid_until"] = self.valid_until()
                 return True
             else:
-                session.pop("user_id", None)
-                session.pop("email_address", None)
-                session.pop("valid_until", None)
+                # Logout
+                self.logout()
         return False
 
 

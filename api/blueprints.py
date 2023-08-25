@@ -34,7 +34,7 @@ class Blueprint_Models():
     @secure_route
     def route_create(model_name:str):
         model = string_to_class(model_name)
-        return str(model.create(request.form))
+        return model.create()
 
 
     # Read
@@ -42,28 +42,28 @@ class Blueprint_Models():
     @secure_route
     def route_read(model_name:str, id:int):
         model = string_to_class(model_name)
-        return str(model.read(id))
+        return model.read(id)
 
 
     # Update
     @blueprint.route("/api/<model_name>/update/<int:id>", methods=['PUT'])
     @secure_route
-    def route_update(self, model_name:str, id:int):
-        model = self.string_to_class(model_name)
+    def route_update(model_name:str, id:int):
+        model = string_to_class(model_name)
         return model.update(id)
 
 
     # Delete
     @blueprint.route("/api/<model_name>/delete/<int:id>", methods=['DELETE'])
     @secure_route
-    def route_delete(self, model_name:str, id:int):
-        model = self.string_to_class(model_name)
+    def route_delete(model_name:str, id:int):
+        model = string_to_class(model_name)
         return model.delete(id)
 
 
     # List
     @blueprint.route("/api/<model_name>/list", methods=['GET'])
     @secure_route
-    def route_list(self, model_name:str):
-        model = self.string_to_class(model_name)
+    def route_list(model_name:str):
+        model = string_to_class(model_name)
         return model.list()
