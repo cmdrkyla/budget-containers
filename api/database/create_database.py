@@ -5,7 +5,7 @@ from models.container import Container
 from models.period import Period
 from models.user import User
 
-def create_database():
+def create_database() -> any:
     with app.app_context():
             db.drop_all()
             db.create_all()
@@ -13,7 +13,7 @@ def create_database():
             return app
     
 
-def create_default_user():
+def create_default_user() -> User:
       user = User()
       user.email_address = "eadiek@gmail.com"
       user.name_first = "Kyla"

@@ -1,7 +1,7 @@
 import os
 import uuid
-from flask import abort, jsonify, request, session
-from datetime import timedelta
+from flask import abort, request, session
+from datetime import datetime, timedelta
 
 from auth.password import Password
 from config import SESSION_TIMEOUT_MINUTES
@@ -35,18 +35,19 @@ class Auth():
             else:
                 cookie_token = None
 
-            return jsonify({
+            return {
                 "success": True,
                 "cookie_token": cookie_token,
-            })
+            }
         else:
             abort(401)
 
+    # Logout form endpoint
     @classmethod
     def logout(self):
         session["auth"] = None
         session.clear()
-        return jsonify({"success": True})
+        return {"success": True}
 
 
     # Authenticate user against database
@@ -75,7 +76,7 @@ class Auth():
 
     # Check if user is logged in
     @classmethod
-    def is_authenticated(self):
+    def is_authenticated(self) -> bool:
         if "auth" in session and "email_address" in session["auth"] and "valid_until" in session["auth"]:
             # Can't compare with utcnow, so we pass the timezone from the saved date
             if session["auth"]["valid_until"] > datetime_now(session["auth"]["valid_until"].tzinfo):
@@ -90,12 +91,12 @@ class Auth():
 
     # Default session timeout datetime
     @classmethod
-    def valid_until(self):
+    def valid_until(self) -> datetime:
         return datetime_utcnow() + timedelta(minutes=SESSION_TIMEOUT_MINUTES)
     
 
     # Generate token for storing as a cookie
     @classmethod
-    def generate_token(self):
+    def generate_token(self) -> str:
         # We don't need anything fancy here, just unique and long
         return str(uuid.uuid4()) + "-" + os.urandom(64).hex()

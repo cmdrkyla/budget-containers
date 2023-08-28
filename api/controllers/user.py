@@ -6,7 +6,7 @@ from auth.password import Password
 from models.user import User
 
 class UserController():
-    def create():
+    def create() -> dict:
         try:
             user = User()
             user.email_address = request.form.get("email_address")
@@ -20,7 +20,7 @@ class UserController():
             return {}
 
 
-    def read(id):
+    def read(id) -> dict:
         try:
             user = db.session.query(User).filter(User.id == id).one()
             return row_to_dict(user)
@@ -28,7 +28,7 @@ class UserController():
             return {}
 
 
-    def update(id):
+    def update(id) -> dict:
         try:
             user = db.session.query(User).filter(User.id == id).one()
             user.email_address = request.form.get("email_address")
@@ -43,7 +43,7 @@ class UserController():
             return {}
 
 
-    def delete(id):
+    def delete(id) -> dict:
         try:
             user = db.session.query(User).filter(User.id == id).one()
             user.deactivated_at = func.now()
@@ -54,7 +54,7 @@ class UserController():
             return {}
         
 
-    def list():
+    def list() -> list[dict]:
         try:
             users = db.session.query(User).filter(User.deactivated_at == None).order_by(User.email_address).all()
             return rows_to_list(users)

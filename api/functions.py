@@ -5,14 +5,14 @@ from controllers.user import UserController
 
 
 # Datetime wrappers
-def datetime_now(timezone:str=None):
+def datetime_now(timezone:str=None) -> datetime:
     return datetime.now(timezone)
-def datetime_utcnow():
+def datetime_utcnow() -> datetime:
     return datetime.utcnow()
 
 
 # String to class object (for routing to correct module)
-def string_to_class(class_string:str):
+def string_to_class(class_string:str) -> object:
     # Turn snake_case to HeadedCamelCase first 
     class_pieces = class_string.split("_")
     model_name = "".join(piece.title() for piece in class_pieces)
