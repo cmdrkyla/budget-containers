@@ -11,7 +11,6 @@ class MetadataMixin(object):
 
 # Turn sqlalchemy row into dict
 def row_to_dict(row:object) -> dict:
-    breakpoint()
     row.__dict__.pop('_sa_instance_state', None)
     return row.__dict__
 
