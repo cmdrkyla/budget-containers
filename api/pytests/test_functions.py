@@ -59,6 +59,19 @@ class Test__datetime_now():
         assert current_time.hour == frozen_datetime_edt.hour
 
 
+class Test__datetime_utcnow():
+    def test__datetime_utcnow(self):
+        # Given - we freeze time in localtime
+        frozen_timestring_local = "2023-01-28 15:57:01"
+        frozen_datetime_utc = datetime(2023, 8, 28, 20, 57, 1)
+        with freeze_time(frozen_timestring_local):
+            # When - we request the current time (no timezone)
+            current_time = datetime_utcnow()
+        
+        # Then - the time matches with our offset
+        assert current_time.hour == frozen_datetime_utc.hour
+
+
 class Test__string_to_class():
     def test__string_to_class__valid(self):
         # Given - a string to turn into a valid class

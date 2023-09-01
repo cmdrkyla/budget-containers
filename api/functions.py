@@ -18,6 +18,12 @@ def datetime_now(timezone:pytz.BaseTzInfo=None) -> datetime:
     return now_server.astimezone(timezone)
 
 
+# Datetime utcnow wrapper
+def datetime_utcnow() -> datetime:
+    utc_tz = pytz.timezone("UTC")
+    return datetime_now(utc_tz)
+
+
 # String to class object (for routing to correct module)
 def string_to_class(class_string:str) -> object:
     # Turn snake_case to HeadedCamelCase first 

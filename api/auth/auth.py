@@ -2,7 +2,9 @@ import os
 import uuid
 from flask import abort, request, session
 from datetime import datetime, timedelta
+import pytz
 
+import app
 from auth.password import Password
 from config import SESSION_TIMEOUT_MINUTES
 from database.database import db
@@ -47,7 +49,10 @@ class Auth():
     def logout(self):
         session["auth"] = None
         session.clear()
-        return {"success": True}
+        if "auth" not in session:
+            return {"success": True}
+        else:
+            abort(500)
 
 
     # Authenticate user against database
@@ -65,13 +70,19 @@ class Auth():
         # Validate the password
         if Password.verify_password(password, found_user.password_hash):
             # Create the session
-            session["auth"] = {}
-            session["auth"]["user_id"] = found_user.id
-            session["auth"]["email_address"] = found_user.email_address
-            session["auth"]["valid_until"] = self.valid_until()
+            self.create_session(found_user)
             return found_user
         else:
             return False
+        
+    
+    # Create session variables
+    @classmethod
+    def create_session(self, found_user):
+        session["auth"] = {}
+        session["auth"]["user_id"] = found_user.id
+        session["auth"]["email_address"] = found_user.email_address
+        session["auth"]["valid_until"] = self.valid_until()
 
 
     # Check if user is logged in
@@ -86,6 +97,7 @@ class Auth():
             else:
                 # Logout
                 self.logout()
+                return False
         return False
 
 

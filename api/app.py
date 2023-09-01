@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 
 import config
 from database.database import db
