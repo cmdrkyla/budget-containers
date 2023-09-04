@@ -6,7 +6,7 @@ import pytz
 from functions import *
 from models.user import User
 
-class Test__datetime_now():
+class TestFunctionsDatetimeNow():
     def test__datetime_now__no_timezone_provided(self):
         # Currently hardcoded, it should figure out the offset from config values
         # Given - we freeze time in localtime
@@ -59,7 +59,7 @@ class Test__datetime_now():
         assert current_time.hour == frozen_datetime_edt.hour
 
 
-class Test__datetime_utcnow():
+class TestFunctionsDatetimeUtcnow():
     def test__datetime_utcnow(self):
         # Given - we freeze time in localtime
         frozen_timestring_local = "2023-01-28 15:57:01"
@@ -72,7 +72,7 @@ class Test__datetime_utcnow():
         assert current_time.hour == frozen_datetime_utc.hour
 
 
-class Test__string_to_class():
+class TestFunctionsStringToClass():
     def test__string_to_class__valid(self):
         # Given - a string to turn into a valid class
         class_string = "user"
