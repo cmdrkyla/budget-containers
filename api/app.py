@@ -1,4 +1,6 @@
 from flask import Flask, session
+import os
+import sys
 
 import config
 from database.database import db
@@ -10,9 +12,14 @@ app = Flask(__name__)
 app.secret_key = config.APP_SECRET_KEY
 
 # Database setup
-app.config ['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.DATABASE_TRACK_MODIFICATIONS
-db.init_app(app) 
+# TODO: Find a more reliable way
+if os.path.basename(sys.argv[0]) == "pytest":
+  app.config ['SQLALCHEMY_DATABASE_URI'] = config.PYTEST_DATABASE_URI
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.PYTEST_DATABASE_TRACK_MODIFICATIONS
+else:
+  app.config ['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.DATABASE_TRACK_MODIFICATIONS
+db.init_app(app)
 
 # Blueprints
 app.register_blueprint(Blueprint_Auth.blueprint)
