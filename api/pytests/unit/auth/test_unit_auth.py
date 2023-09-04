@@ -8,7 +8,9 @@ from app import app
 from auth.auth import Auth, session
 from auth.password import Password
 from config import SESSION_TIMEOUT_MINUTES
+from database.database import db
 from functions import datetime_utcnow
+from models.user import User
 
 class TestAuthLogin:
     @mock.patch.object(Auth, "authenticate")

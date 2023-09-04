@@ -8,9 +8,16 @@ from database.database import db
 from models.user import User
 
 app.app_context().push()
-db.create_all()
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function", autouse=True)
+def test_db():
+    db.create_all()
+    yield
+    db.session.close()
+    db.drop_all()
+
+
+@pytest.fixture(scope="function")
 def random_user():
     user = User(
         email_address = str(uuid.uuid4()) + "@company.test",
