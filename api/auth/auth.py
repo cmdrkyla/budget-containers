@@ -88,6 +88,7 @@ class Auth():
     # Check if user is logged in
     @classmethod
     def is_authenticated(self) -> bool:
+        # Standard session
         if "auth" in session and "email_address" in session["auth"] and "valid_until" in session["auth"]:
             # Can't compare with utcnow, so we pass the timezone from the saved date
             if session["auth"]["valid_until"] > datetime_now(session["auth"]["valid_until"].tzinfo):
@@ -98,6 +99,9 @@ class Auth():
                 # Logout
                 self.logout()
                 return False
+        # Cookie token
+        elif request.headers.get("X-Cookie-Token", None) != None:
+            return self.authenticate_cookie_token(request.headers.get("X-Cookie-Token"))
         return False
 
 
@@ -112,3 +116,16 @@ class Auth():
     def generate_token(self) -> str:
         # We don't need anything fancy here, just unique and long
         return str(uuid.uuid4()) + "-" + os.urandom(64).hex()
+    
+    @classmethod
+    def authenticate_cookie_token(self, cookie_token):
+        try:
+            found_user = db.session.query(User).filter(
+                User.cookie_token == cookie_token,
+                User.deactivated_at == None,
+            ).one()
+            # Create the session
+            self.create_session(found_user)
+            return True
+        except:
+            return False
