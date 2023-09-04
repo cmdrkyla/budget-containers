@@ -18,6 +18,20 @@ def test_db():
 
 
 @pytest.fixture(scope="function")
+def cookie_user():
+    user = User(
+        cookie_token = "testing",
+        email_address = "cookie@company.test",
+        name_first = "Cookie",
+        name_last = "User",
+        password_hash = Password.hash_password("cookies"),
+    )
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
+@pytest.fixture(scope="function")
 def random_user():
     user = User(
         email_address = str(uuid.uuid4()) + "@company.test",
@@ -28,4 +42,3 @@ def random_user():
     db.session.add(user)
     db.session.commit()
     return user
-    
