@@ -17,7 +17,7 @@ class UserController():
             db.session.commit()
             return row_to_dict(user)
         except:
-            return {}
+            return
 
 
     def read(id) -> dict:
@@ -25,7 +25,7 @@ class UserController():
             user = db.session.query(User).filter(User.id == id).one()
             return row_to_dict(user)
         except:
-            return {}
+            return
 
 
     def update(id) -> dict:
@@ -40,7 +40,7 @@ class UserController():
             db.session.commit()
             return row_to_dict(user)
         except:
-            return {}
+            return
 
 
     def delete(id) -> dict:
@@ -51,7 +51,7 @@ class UserController():
             db.session.commit()
             return row_to_dict(user)
         except:
-            return {}
+            return
         
 
     def list() -> list[dict]:
@@ -59,4 +59,4 @@ class UserController():
             users = db.session.query(User).filter(User.deactivated_at == None).order_by(User.email_address).all()
             return rows_to_list(users)
         except:
-            return []
+            return

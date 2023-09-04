@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import abort, Blueprint, jsonify, request
 
 from auth.auth import Auth
 from auth.route import secure_route
@@ -33,7 +33,11 @@ class Blueprint_Models():
     @secure_route
     def route_create(model_name:str) -> any:
         model = string_to_class(model_name)
-        return model.create()
+        record = model.create()
+        if record:
+            return record
+        else:
+            abort(500)
 
 
     # Read
@@ -41,7 +45,11 @@ class Blueprint_Models():
     @secure_route
     def route_read(model_name:str, id:int) -> any:
         model = string_to_class(model_name)
-        return model.read(id)
+        record = model.read(id)
+        if record:
+            return record
+        else:
+            abort(500)
 
 
     # Update
@@ -49,7 +57,11 @@ class Blueprint_Models():
     @secure_route
     def route_update(model_name:str, id:int) -> any:
         model = string_to_class(model_name)
-        return model.update(id)
+        record = model.update(id)
+        if record:
+            return record
+        else:
+            abort(500)
 
 
     # Delete
@@ -57,7 +69,11 @@ class Blueprint_Models():
     @secure_route
     def route_delete(model_name:str, id:int) -> any:
         model = string_to_class(model_name)
-        return model.delete(id)
+        record = model.delete(id)
+        if record:
+            return record
+        else:
+            abort(500)
 
 
     # List
@@ -65,4 +81,8 @@ class Blueprint_Models():
     @secure_route
     def route_list(model_name:str) -> any:
         model = string_to_class(model_name)
-        return model.list()
+        records = model.list()
+        if records:
+            return records
+        else:
+            abort(500)
