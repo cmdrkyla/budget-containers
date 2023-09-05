@@ -13,6 +13,7 @@ init_logging()
 # App setup
 app = Flask(__name__)
 app.secret_key = config.APP_SECRET_KEY
+app.logger.info("Flask app initiated")
 
 # Database setup
 # TODO: Find a more reliable way
@@ -23,10 +24,12 @@ else:
   app.config ['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URI
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.DATABASE_TRACK_MODIFICATIONS
 db.init_app(app)
+app.logger.info("Database at " + config.DATABASE_URI + " initiated")
 
 # Blueprints
 app.register_blueprint(Blueprint_Auth.blueprint)
 app.register_blueprint(Blueprint_Models.blueprint)
+app.logger.info("Flask blueprints initiated")
 
 # Run the app
 if __name__ == "__main__":

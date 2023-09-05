@@ -7,14 +7,17 @@ from auth.password import Password
 from database.database import db
 from models.user import User
 
+app.logger.info("Pytests running")
 app.app_context().push()
 
 @pytest.fixture(scope="function", autouse=True)
 def test_db():
     db.create_all()
+    app.logger.debug("Databases created")
     yield
     db.session.close()
     db.drop_all()
+    app.logger.debug("Databases dropped")
 
 
 @pytest.fixture(scope="function")

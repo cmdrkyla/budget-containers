@@ -2,6 +2,7 @@ from datetime import datetime
 import pytz
 from sys import modules
 
+import app
 from config import DEFAULT_TIMEZONE, SERVER_TIMEZONE
 from controllers.user import UserController
 
@@ -34,4 +35,5 @@ def string_to_class(class_string:str) -> object:
         class_object = getattr(modules[__name__], controller_name)
         return class_object
     except AttributeError:
+        app.app.logger.error(f"Invalid module or controller: class_string={class_string}")
         return None

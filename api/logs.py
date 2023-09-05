@@ -1,4 +1,5 @@
 from logging.config import dictConfig
+from logging import getLogger
 
 import config
 
@@ -30,3 +31,5 @@ def init_logging():
             "handlers": ["console", "time-rotate"]
         },
     })
+
+    getLogger("werkzeug").setLevel("INFO")
