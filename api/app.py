@@ -3,9 +3,12 @@ import os
 import sys
 
 import config
-from database.database import db
 from blueprints import Blueprint_Auth, Blueprint_Models
+from database.database import db
+from logs import init_logging
 
+# Init logging
+init_logging()
 
 # App setup
 app = Flask(__name__)
