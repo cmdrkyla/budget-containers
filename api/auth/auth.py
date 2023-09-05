@@ -117,6 +117,7 @@ class Auth():
         # We don't need anything fancy here, just unique and long
         return str(uuid.uuid4()) + "-" + os.urandom(64).hex()
     
+    
     @classmethod
     def authenticate_cookie_token(self, cookie_token):
         try:

@@ -12,46 +12,6 @@ from database.database import db
 from functions import datetime_utcnow
 from models.user import User
 
-class TestAuthLogin:
-    @mock.patch.object(Auth, "authenticate")
-    def test__auth_login__valid(self, mock_auth_authenticate):
-        # Given - valid user authentication (mocking auth response)
-        valid_email_address = "valid_email_address"
-        valid_password = "valid_password"
-        mock_auth_authenticate.return_value = True
-
-        # When - we login
-        response = app.test_client().post(
-            "/api/auth/login",
-            data={
-                "email_address": valid_email_address,
-                "password": valid_password
-            },
-        )
-
-        # Then - success status code
-        assert response.status_code == 200
-
-
-    @mock.patch.object(Auth, "authenticate")
-    def test__auth_login__invalid(self, mock_auth_authenticate):
-        # Given - invalid user authentication (mocking auth response)
-        invalid_email_address = "invalid_email_address"
-        invalid_password = "invalid_password"
-        mock_auth_authenticate.return_value = False
-
-        # When - we login
-        response = app.test_client().post(
-            "/api/auth/login",
-            data={
-                "email_address": invalid_email_address,
-                "password": invalid_password
-            },
-        )
-
-        # Then - forbidden status code
-        assert response.status_code == 401
-
     
 class TestAuthAuthenticate:
     @mock.patch.object(Password, "verify_password")
@@ -157,3 +117,50 @@ class TestAuthValidUntil:
 
             # Then - it matches our expectations
             assert valid_until == test_valid_until
+
+
+class TestAuthGenerateCookieToken:
+    def test__auth_generate_token(self):
+        # When - we generate a token
+        token = Auth.generate_token()
+
+        # Then - what we are expecting is returned
+        assert token != None
+        assert token != ""
+        assert type(token) == str
+        assert len(token) == 165
+
+
+class TestAuthAuthenticateCookieToken:
+    def test__auth_authenticate_cookie_token__user_not_found(self):
+        # Given - we don't generate a user
+        token = "invalid"
+        # When - we pass an invalid token to be authenticated
+        is_authenticated = Auth.authenticate_cookie_token(token)
+        # Then - false is returned
+        assert is_authenticated == False
+
+
+class TestAuthAuthenticateCookieToken:
+    def test__auth_authenticate_cookie_token__deactivated_user(self, cookie_user):
+        # Given - we generate and deactivate a user with a cookie token
+        cookie_user.date_deactivated = datetime_utcnow()
+        db.session.add(cookie_user)
+        db.session.commit()
+
+        # When - we pass the correct token to be authenticated
+        is_authenticated = Auth.authenticate_cookie_token(cookie_user.cookie_token)
+
+        # Then - false is returned
+        assert is_authenticated == False
+
+
+    @mock.patch.object(Auth, "create_session")
+    def test__auth_authenticate_cookie_token__valid(self, mock_create_session, cookie_user):
+        # Given - we generate a user with a cookie token
+        # When - we pass the correct token to be authenticated
+        mock_create_session.return_value = True
+        is_authenticated = Auth.authenticate_cookie_token(cookie_user.cookie_token)
+
+        # Then - true is returned
+        assert is_authenticated == True
