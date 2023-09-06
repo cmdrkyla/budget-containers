@@ -11,8 +11,11 @@ class MetadataMixin(object):
 
 # Turn sqlalchemy row into dict
 def row_to_dict(row:object) -> dict:
-    row.__dict__.pop('_sa_instance_state', None)
-    return row.__dict__
+    row_dict = {}
+    for property in row.__table__.columns.keys():
+        row_dict[property] = getattr(row, property)
+    return row_dict
+
 
 
 # Turn sqlalchemy rows into list of dicts

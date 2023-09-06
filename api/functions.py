@@ -35,5 +35,5 @@ def string_to_class(class_string:str) -> object:
         class_object = getattr(modules[__name__], controller_name)
         return class_object
     except AttributeError:
-        app.app.logger.error(f"Invalid module or controller: class_string={class_string}")
+        app.app.logger.debug(f"Invalid module or controller: class_string={class_string}")
         return None
