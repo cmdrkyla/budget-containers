@@ -110,7 +110,7 @@ class TestAuthValidUntil:
         utc_timezone = pytz.timezone("UTC")
         test_valid_until = utc_timezone.localize(
             frozen_datetime_utc + relativedelta(minutes=SESSION_TIMEOUT_MINUTES)
-        )
+        ).replace(tzinfo=None)
         with freeze_time(frozen_datetime_utc, utc_offset):
             # When - we request the valid_until date
             valid_until = Auth.valid_until()

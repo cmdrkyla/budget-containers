@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from freezegun import freeze_time
 import pytest
 import pytz
@@ -10,8 +10,8 @@ class TestFunctionsDatetimeNow():
     def test__datetime_now__no_timezone_provided(self):
         # Currently hardcoded, it should figure out the offset from config values
         # Given - we freeze time in localtime
-        frozen_timestring_local = "2023-01-28 15:57:01"
-        frozen_datetime_utc = datetime(2023, 8, 28, 20, 57, 1)
+        frozen_timestring_local = "2023-08-28 15:57:01"
+        frozen_datetime_utc = datetime(2023, 8, 28, 19, 57, 1)
         with freeze_time(frozen_timestring_local):
             # When - we request the current time (no timezone)
             current_time = datetime_now()
@@ -70,6 +70,9 @@ class TestFunctionsDatetimeUtcnow():
         
         # Then - the time matches with our offset
         assert current_time.hour == frozen_datetime_utc.hour
+
+
+# TODO: Tests for new date_now and date_utcnow functions
 
 
 class TestFunctionsStringToClass():

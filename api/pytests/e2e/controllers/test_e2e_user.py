@@ -30,6 +30,8 @@ class TestUserControllerCreateE2E:
         assert user_data["email_address"] == response_json["email_address"]
 
 
+@mock.patch.object(Auth, "is_authenticated")
+class TestUserControllerReadE2E:
     def test__user_controller_read(self, mock_auth_authenticate, random_user):
         # Given - we have a random user
         mock_auth_authenticate.return_value = True
@@ -43,6 +45,8 @@ class TestUserControllerCreateE2E:
         assert random_user.email_address == response_json["email_address"]
 
 
+@mock.patch.object(Auth, "is_authenticated")
+class TestUserControllerUpdateE2E:
     def test__user_controller_update(self, mock_auth_authenticate, random_user):
         # Given - a user to modify
         user_data = {
@@ -51,7 +55,7 @@ class TestUserControllerCreateE2E:
         }
         mock_auth_authenticate.return_value = True
 
-        # When - we create the user
+        # When - we update the user
         response = app.test_client().put(
             f"/api/user/update/{random_user.id}",
             data=user_data,
@@ -63,6 +67,8 @@ class TestUserControllerCreateE2E:
         assert user_data["name_first"] == response_json["name_first"]
 
 
+@mock.patch.object(Auth, "is_authenticated")
+class TestUserControllerDeleteE2E:
     def test__user_controller_delete(self, mock_auth_authenticate, random_user):
         # Given - we have a random user
         mock_auth_authenticate.return_value = True
@@ -76,11 +82,13 @@ class TestUserControllerCreateE2E:
         assert response_json["deactivated_at"] != None
 
 
+@mock.patch.object(Auth, "is_authenticated")
+class TestUserControllerListE2E:
     def test__user_controller_list(self, mock_auth_authenticate, random_user):
         # Given - we have a random user
         mock_auth_authenticate.return_value = True
 
-        # When - we delete that record
+        # When - we list the records
         response = app.test_client().get(f"/api/user/list")
         
         # Then - success status code and valid data
