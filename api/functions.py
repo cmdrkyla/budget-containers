@@ -6,6 +6,7 @@ import app
 from config import DEFAULT_TIMEZONE, SERVER_TIMEZONE
 from controllers.activity import ActivityController
 from controllers.container import ContainerController
+from controllers.period import PeriodController
 from controllers.user import UserController
 
 
