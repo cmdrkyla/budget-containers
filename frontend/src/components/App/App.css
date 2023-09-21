@@ -1,0 +1,41 @@
+.App,
+.login-wrapper {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-header {
+  background-color: #1f984c;
+  height: 100px;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-content,
+.login-wrapper form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  padding: 20px;
+}
+
+.App-footer {
+  background-color: #1f984c;
+  min-height: 50px;
+  font-size: calc(5px + 2vmin);
+  color: white;
+
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
