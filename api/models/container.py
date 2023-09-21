@@ -2,6 +2,11 @@ import enum
 
 from database.database import db, MetadataMixin
 
+class FrequencyMonthRepeat(enum.Enum):
+    SAME_DATE = "Same Date"
+    SAME_WEEK = "Same Week"
+
+
 class FrequencyType(enum.Enum):
     DAY = "Day"
     WEEK = "Week"
@@ -16,11 +21,6 @@ class FrequencyWeekRepeat(enum.Enum):
     THURSDAY = 4
     FRIDAY = 5
     SATURDAY = 6
-
-
-class FrequencyMonthRepeat(enum.Enum):
-    SAME_DATE = "Same Date"
-    SAME_WEEK = "Same Week"
 
 
 class Container(MetadataMixin, db.Model):

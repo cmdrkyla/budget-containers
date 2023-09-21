@@ -34,9 +34,12 @@ class UserController():
     def update(id) -> dict:
         try:
             user = db.session.query(User).filter(User.id == id).one()
-            user.email_address = request.form.get("email_address", user.email_address)
-            user.name_first = request.form.get("name_first", user.name_first)
-            user.name_last = request.form.get("name_last", user.name_last)
+            if request.form.get("email_address"):
+                user.email_address = request.form.get("email_address")
+            if request.form.get("name_first"):
+                user.name_first = request.form.get("name_first")
+            if request.form.get("name_last"):
+                user.name_last = request.form.get("name_last")
             if request.form.get("password"):
                 user.password_hash = Password.hash_password(request.form.get("password"))
             db.session.add(user)

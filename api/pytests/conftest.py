@@ -107,3 +107,4 @@ def user_with_activity(user_with_records):
         user_with_records["user"].id,
     )
     return user_with_records
+

@@ -1,3 +1,4 @@
+from enum import Enum
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 
@@ -13,7 +14,11 @@ class MetadataMixin(object):
 def row_to_dict(row:object) -> dict:
     row_dict = {}
     for property in row.__table__.columns.keys():
-        row_dict[property] = getattr(row, property)
+        # Is it an enum
+        if isinstance(getattr(row, property), Enum):
+            row_dict[property] = getattr(row, property).value
+        else:
+            row_dict[property] = getattr(row, property)
     return row_dict
 
 
