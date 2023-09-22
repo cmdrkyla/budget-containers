@@ -12,9 +12,20 @@
     padding-bottom: 10px;
 }
 
+.login-wrapper form > h2 {
+    text-align: center;
+    margin: 4px;
+    padding: 4px;
+}
+
+.login-wrapper form > div {
+    text-align: left;
+}
+
 .login-wrapper label {
     text-align: left;
-    align-items: left;
+    display: inline-block;
     padding-right: 10px;
-    user-select: none
+    user-select: none;
+    width: 150px;
 }

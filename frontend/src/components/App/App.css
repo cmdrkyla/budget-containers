@@ -31,11 +31,9 @@
 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error-container {
+  color: #000;
+  background-color: rgb(246, 133, 133);
+  padding: 10px;
+  margin: 5px;
 }
