@@ -20,26 +20,29 @@ class Auth():
     @classmethod
     def login(self):
         try:
-            email_address = request.form.get("email_address", None, str)
-            password = request.form.get("password", None, str)
-            remember_me = request.form.get("remember_me", False, bool)
+            email_address = request.json["email_address"]
+            password = request.json["password"]
+            if "remember_me" in request.json and request.json["remember_me"]:
+                remember_me = True
+            else:
+                remember_me = False
         except AttributeError:
             abort(400)
         # Try to authenticate
         user = Auth.authenticate(email_address, password)
+        
         if user:
+            # Generate a token for the session (and possible to save)
+            cookie_token = self.generate_token()
             # Store token for after session expires
             if remember_me:
-                cookie_token = self.generate_token()
                 user.cookie_token = cookie_token
                 db.session.add(user)
                 db.session.commit()
-            else:
-                cookie_token = None
 
             return {
                 "success": True,
-                "cookie_token": cookie_token,
+                "token": cookie_token,
             }
         else:
             abort(401)

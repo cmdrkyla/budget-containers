@@ -1,4 +1,5 @@
 from flask import Flask, session
+from flask_cors import CORS
 import os
 import sys
 
@@ -14,6 +15,7 @@ init_logging()
 app = Flask(__name__)
 app.secret_key = config.APP_SECRET_KEY
 app.logger.info("Flask app initiated")
+CORS(app)
 
 # Database setup
 # TODO: Find a more reliable way
