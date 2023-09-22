@@ -1,3 +1,4 @@
+import json
 from unittest import mock
 
 from app import app
@@ -14,10 +15,11 @@ class TestAuthLoginE2E:
         # When - we login
         response = app.test_client().post(
             "/api/auth/login",
-            data={
+            data=json.dumps({
                 "email_address": valid_email_address,
                 "password": valid_password
-            },
+            }),
+            content_type='application/json',
         )
 
         # Then - success status code
@@ -34,10 +36,11 @@ class TestAuthLoginE2E:
         # When - we login
         response = app.test_client().post(
             "/api/auth/login",
-            data={
+            data=json.dumps({
                 "email_address": invalid_email_address,
                 "password": invalid_password
-            },
+            }),
+            content_type='application/json',
         )
 
         # Then - forbidden status code

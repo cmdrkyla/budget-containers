@@ -119,7 +119,7 @@ class TestAuthValidUntil:
             assert valid_until == test_valid_until
 
 
-class TestAuthGenerateCookieToken:
+class TestAuthGenerateUserToken:
     def test__auth_generate_token(self):
         # When - we generate a token
         token = Auth.generate_token()
@@ -131,36 +131,36 @@ class TestAuthGenerateCookieToken:
         assert len(token) == 165
 
 
-class TestAuthAuthenticateCookieToken:
-    def test__auth_authenticate_cookie_token__user_not_found(self):
+class TestAuthAuthenticateLoginToken:
+    def test__auth_authenticate_login_token__user_not_found(self):
         # Given - we don't generate a user
         token = "invalid"
         # When - we pass an invalid token to be authenticated
-        is_authenticated = Auth.authenticate_cookie_token(token)
+        is_authenticated = Auth.authenticate_user_token(token)
         # Then - false is returned
         assert is_authenticated == False
 
 
-class TestAuthAuthenticateCookieToken:
-    def test__auth_authenticate_cookie_token__deactivated_user(self, cookie_user):
-        # Given - we generate and deactivate a user with a cookie token
-        cookie_user.date_deactivated = datetime_utcnow()
-        db.session.add(cookie_user)
+class TestAuthAuthenticateLoginToken:
+    def test__auth_authenticate_login_token__deactivated_user(self, token_user):
+        # Given - we generate and deactivate a user with a login token
+        token_user.date_deactivated = datetime_utcnow()
+        db.session.add(token_user)
         db.session.commit()
 
         # When - we pass the correct token to be authenticated
-        is_authenticated = Auth.authenticate_cookie_token(cookie_user.cookie_token)
+        is_authenticated = Auth.authenticate_login_token(token_user.login_token)
 
         # Then - false is returned
         assert is_authenticated == False
 
 
     @mock.patch.object(Auth, "create_session")
-    def test__auth_authenticate_cookie_token__valid(self, mock_create_session, cookie_user):
-        # Given - we generate a user with a cookie token
+    def test__auth_authenticate_login_token__valid(self, mock_create_session, token_user):
+        # Given - we generate a user with a login token
         # When - we pass the correct token to be authenticated
         mock_create_session.return_value = True
-        is_authenticated = Auth.authenticate_cookie_token(cookie_user.cookie_token)
+        is_authenticated = Auth.authenticate_login_token(token_user.login_token)
 
         # Then - true is returned
         assert is_authenticated == True

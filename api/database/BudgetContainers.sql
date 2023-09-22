@@ -60,16 +60,16 @@ CREATE TABLE IF NOT EXISTS user(
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deactivated_at DATETIME NULL,
     modified_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    cookie_token CHAR(64) NULL,
     email_address VARCHAR(100) NOT NULL,
+    login_token CHAR(64) NULL,
     name_first VARCHAR(50) NOT NULL,
     name_last VARCHAR(50) NOT NULL,
     password_hash CHAR(96) NOT NULL
 );
 DROP INDEX IF EXISTS email_address;
-DROP INDEX IF EXISTS idx_cookie_token;
+DROP INDEX IF EXISTS idx_login_token;
 DROP INDEX IF EXISTS idx_email_address;
-CREATE INDEX idx_cookie_token ON user(cookie_token);
+CREATE INDEX idx_login_token ON user(login_token);
 CREATE INDEX idx_email_address ON user(email_address);
 
 

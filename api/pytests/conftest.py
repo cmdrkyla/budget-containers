@@ -25,13 +25,13 @@ def test_db():
 
 
 @pytest.fixture(scope="function")
-def cookie_user():
+def token_user():
     user = User(
-        cookie_token = "testing",
-        email_address = "cookie@company.test",
-        name_first = "Cookie",
+        email_address = "token@company.test",
+        login_token = "testing",
+        name_first = "Token",
         name_last = "User",
-        password_hash = Password.hash_password("cookies"),
+        password_hash = Password.hash_password("token"),
     )
     db.session.add(user)
     db.session.commit()

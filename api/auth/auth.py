@@ -33,16 +33,16 @@ class Auth():
         
         if user:
             # Generate a token for the session (and possible to save)
-            cookie_token = self.generate_token()
+            login_token = self.generate_token()
             # Store token for after session expires
             if remember_me:
-                user.cookie_token = cookie_token
+                user.login_token = login_token
                 db.session.add(user)
                 db.session.commit()
 
             return {
                 "success": True,
-                "token": cookie_token,
+                "token": login_token,
             }
         else:
             abort(401)
@@ -102,9 +102,9 @@ class Auth():
                 # Logout
                 self.logout()
                 return False
-        # Cookie token
-        elif request.headers.get("X-Cookie-Token", None) != None:
-            return self.authenticate_cookie_token(request.headers.get("X-Cookie-Token"))
+        # Login token
+        elif request.headers.get("X-Login-Token", None) != None:
+            return self.authenticate_login_token(request.headers.get("X-Login-Token"))
         return False
 
 
@@ -114,7 +114,7 @@ class Auth():
         return datetime_utcnow() + timedelta(minutes=SESSION_TIMEOUT_MINUTES)
     
 
-    # Generate token for storing as a cookie
+    # Generate token for storing in local storage
     @classmethod
     def generate_token(self) -> str:
         # We don't need anything fancy here, just unique and long
@@ -122,10 +122,10 @@ class Auth():
     
     
     @classmethod
-    def authenticate_cookie_token(self, cookie_token):
+    def authenticate_login_token(self, login_token):
         try:
             found_user = db.session.query(User).filter(
-                User.cookie_token == cookie_token,
+                User.login_token == login_token,
                 User.deactivated_at == None,
             ).one()
             # Create the session
