@@ -3,10 +3,10 @@ from flask_cors import CORS
 import os
 import sys
 
-import config
-from blueprints import Blueprint_Auth, Blueprint_Models
+from imports import config
+from imports.blueprints import Blueprint_Auth, Blueprint_Models
 from database.database import db
-from logs import init_logging
+from imports.logs import init_logging
 
 # Init logging
 init_logging()

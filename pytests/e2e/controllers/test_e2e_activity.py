@@ -4,7 +4,7 @@ from unittest import mock
 
 from app import app
 from auth.auth import Auth
-from functions import date_utcnow
+from imports.functions import date_utcnow
 
 @mock.patch.object(Auth, "is_authenticated")
 class TestActivityControllerCreateE2E:

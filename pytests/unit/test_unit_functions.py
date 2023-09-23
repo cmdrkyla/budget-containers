@@ -3,7 +3,7 @@ from freezegun import freeze_time
 import pytest
 import pytz
 
-from functions import *
+from imports.functions import *
 from models.user import User
 
 class TestFunctionsDatetimeNow():

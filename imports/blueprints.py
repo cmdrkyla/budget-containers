@@ -2,7 +2,7 @@ from flask import abort, Blueprint, jsonify, request
 
 from auth.auth import Auth
 from auth.route import secure_route
-from functions import string_to_class
+from imports.functions import string_to_class
 
 
 class Blueprint_Auth():

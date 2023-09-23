@@ -1,7 +1,7 @@
 from logging.config import dictConfig
 from logging import getLogger
 
-import config
+from imports import config
 
 def init_logging():
     dictConfig({
