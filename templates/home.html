@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include "_head.html" %}
+    <body id="body_home">
+        <div id="root">
+            {% include "_header.html" %}
+            <div id="main_content">
+                <script>
+                    process_request("containers/list").then((response) => {
+                       alert(response);
+                    },
+                    (error) => {
+                        message_center("Error fetching containers.", "error");
+                    })
+                </script>
+                {% if config['DEBUG'] %}
+                    {% include "_debug.html" %}
+                {% endif %}
+            </div>
+            {% include "_footer.html" %}
+        </div>
+    </body>
+</html>

@@ -1,9 +1,8 @@
-from flask import abort, Blueprint, jsonify, request
+from flask import abort, Blueprint, jsonify, render_template
 
 from auth.auth import Auth
 from auth.route import secure_route
 from imports.functions import string_to_class
-
 
 class Blueprint_Auth():
     blueprint = Blueprint("blueprint_auth", __name__)
@@ -86,3 +85,17 @@ class Blueprint_Models():
             return records
         else:
             abort(500)
+
+
+class Blueprint_Frontend():
+    blueprint = Blueprint("blueprint_frontend", __name__)
+
+    # Login
+    @blueprint.route("/login")
+    def login() -> any:
+        return render_template("login.html")
+
+    # Home
+    @blueprint.route("/")
+    def home() -> any:
+        return render_template("home.html")

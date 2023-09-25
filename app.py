@@ -4,7 +4,7 @@ import os
 import sys
 
 from imports import config
-from imports.blueprints import Blueprint_Auth, Blueprint_Models
+from imports.blueprints import Blueprint_Auth, Blueprint_Models, Blueprint_Frontend
 from database.database import db
 from imports.logs import init_logging
 
@@ -31,6 +31,7 @@ app.logger.info("Database at " + config.DATABASE_URI + " initiated")
 # Blueprints
 app.register_blueprint(Blueprint_Auth.blueprint)
 app.register_blueprint(Blueprint_Models.blueprint)
+app.register_blueprint(Blueprint_Frontend.blueprint)
 app.logger.info("Flask blueprints initiated")
 
 # Run the app
