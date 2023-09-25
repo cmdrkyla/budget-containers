@@ -16,15 +16,30 @@ function set_token(token, remember_me)
 }
 function get_token()
 {
-    if(localStorage.getItem("token"))
+    if(localStorage.getItem("token") !== null)
         return localStorage.getItem("token");
-    else if(sessionStorage.getItem("token"))
+    else if(sessionStorage.getItem("token") !== null)
         return sessionStorage.getItem("token");
     else
         return "";
 }
+function delete_token()
+{
+    if(localStorage.getItem("token") !== null)
+        localStorage.removeItem("token")
+    else if(sessionStorage.getItem("token") !== null)
+        sessionStorage.removeItem("token");
+}
 
+function logout()
+{
+    delete_token();
+    api_request("auth/logout").then((response) => {
+        window.location.href = server_url + "login"
+    });
+}
 
+// Handlers
 $(document).ready( function()
 {
     // Login
@@ -35,7 +50,7 @@ $(document).ready( function()
             "password": $("#field_password").val(),
             "remember_me": $("#field_remember_me").is(":checked")
         }
-        process_request("auth/login", data, "POST").then((response) => {
+        api_request("auth/login", data, "POST").then((response) => {
             // Store in session or local storage (depending on remember_me)
             set_token(response.token, data.remember_me);
             // Load homepage
@@ -44,5 +59,11 @@ $(document).ready( function()
         (error) => {
             message_center("Error logging in, please check your credentials and try again.", "error");
         })
+    });
+
+    // Logout
+    $("#logout").on("click", function(event){
+        event.preventDefault();
+        logout();
     });
 });

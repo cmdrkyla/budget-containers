@@ -6,12 +6,12 @@
             {% include "_header.html" %}
             <div id="main_content">
                 <script>
-                    process_request("containers/list").then((response) => {
-                       alert(response);
+                    api_request("/container/list").then((response) => {
+                       $("#main_content").text(JSON.stringify(response));
                     },
-                    (error) => {
+                    (error) => {   
                         message_center("Error fetching containers.", "error");
-                    })
+                    });
                 </script>
                 {% if config['DEBUG'] %}
                     {% include "_debug.html" %}

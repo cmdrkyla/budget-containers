@@ -94,7 +94,7 @@ class Auth():
         # Standard session
         if "auth" in session and "email_address" in session["auth"] and "valid_until" in session["auth"]:
             # Can't compare with utcnow, so we pass the timezone from the saved date
-            if session["auth"]["valid_until"] > datetime_now(session["auth"]["valid_until"].tzinfo):
+            if session["auth"]["valid_until"].replace(tzinfo=None) > datetime_now():
                 # Reset timeout
                 session["auth"]["valid_until"] = self.valid_until()
                 return True

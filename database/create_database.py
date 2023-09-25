@@ -1,7 +1,8 @@
 from app import app
 from database.database import db
+from imports.functions import date_now
 from models.activity import Activity
-from models.container import Container
+from models.container import Container, FrequencyMonthRepeat, FrequencyType
 from models.period import Period
 from models.user import User
 
@@ -9,7 +10,8 @@ def create_database() -> any:
     with app.app_context():
             db.drop_all()
             db.create_all()
-            create_default_user()
+            user = create_default_user()
+            container = create_default_container(user.id)
             return app
     
 
@@ -23,3 +25,16 @@ def create_default_user() -> User:
       db.session.add(user)
       db.session.commit()
       return user
+
+def create_default_container(user_id) -> Container:
+      container = Container()
+      container.amount = 500
+      container.frequency_interval = 1
+      container.frequency_month_repeat = FrequencyMonthRepeat.SAME_DATE
+      container.frequency_type = FrequencyType.MONTH
+      container.name = "Allowance"
+      container.start_date = date_now()
+      container.user_id = user_id
+      db.session.add(container)
+      db.session.commit()
+      return container
