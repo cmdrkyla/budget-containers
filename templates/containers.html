@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include "_head.html" %}
+    <body id="body_containers">
+        <div id="root">
+            {% include "_header.html" %}
+            <div id="main_content">
+                <h2>Containers</h2>
+                <script>
+                    api_request("container/list").then((data) => {
+                       for(i=0; i<data.length; i++)
+                       {
+                            let output = "<tr id='id_" + data[i].id + "'>";
+                            output += "<td><a href='#'>Edit</a></td>";
+                            output += "<td>" + data[i].name + "</td>";
+                            output += "<td>$" + data[i].amount + "</td>";
+                            output += "<td>" + data[i].frequency_type + "</td>";
+                            output += "<td>" + data[i].frequency_interval + "</td>";
+                            output += "<td>" + null_to_ws(data[i].frequency_month_repeat) + "</td>";
+                            output += "<td>" + null_to_ws(data[i].frequency_week_repeat) + "</td>";
+                            output += "<td>" + format_date(data[i].start_date) + "</td>";
+                            output += "<td><a href='#'>Delete</a></td>";
+                            output += "</tr>";
+                            $("table.list tbody").append(output);
+                       }
+                    },
+                    (error) => {   
+                        message_center("Error fetching containers.", "error");
+                    });
+                </script>
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Frequency Type</th>
+                            <th>Interval</th>
+                            <th>Month Repeat</th>
+                            <th>Week Repeat</th>
+                            <th>Start Date</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            {% include "_footer.html" %}
+        </div>
+    </body>
+</html>

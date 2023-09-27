@@ -81,10 +81,7 @@ class Blueprint_Models():
     def route_list(model_name:str) -> any:
         model = string_to_class(model_name)
         records = model.list()
-        if records:
-            return records
-        else:
-            abort(500)
+        return records
 
 
 class Blueprint_Frontend():
@@ -99,3 +96,23 @@ class Blueprint_Frontend():
     @blueprint.route("/")
     def home() -> any:
         return render_template("home.html")
+
+    # Activities
+    @blueprint.route("/activities")
+    def activities() -> any:
+        return render_template("activities.html")
+
+    # Containers
+    @blueprint.route("/containers")
+    def containers() -> any:
+        return render_template("containers.html")
+
+    # Periods
+    @blueprint.route("/periods")
+    def periods() -> any:
+        return render_template("periods.html")
+
+    # User
+    @blueprint.route("/user")
+    def user() -> any:
+        return render_template("user.html")

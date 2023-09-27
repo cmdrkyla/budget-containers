@@ -52,6 +52,34 @@ header h1 {
     padding: 10px;
 }
 
+#main_content > h2 {
+    text-align: center;
+}
+
+#main_content a {
+    color: #72bc72;
+    text-decoration: none;
+}
+
+#main_content table.list {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+#main_content table.list th {
+    text-align: left;
+    border-collapse: collapse;
+}
+#main_content table.list td {
+    text-align: left;
+    border-collapse: collapse;
+    border: 1px solid #888;
+    padding: 3px;
+}
+#main_content table.list .template {
+    display: none;
+}
+
 footer {
     background-color: #72bc72;
     margin: 0px;

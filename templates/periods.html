@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include "_head.html" %}
+    <body id="body_periods">
+        <div id="root">
+            {% include "_header.html" %}
+            <div id="main_content">
+                <h2>Periods</h2>
+                <script>
+                    api_request("period/list").then((data) => {
+                       for(i=0; i<data.length; i++)
+                       {
+                            let output = "<tr id='id_" + data[i].id + "'>";
+                            output += "<td><a href='#'>Edit</a></td>";
+                            output += "<td>" + format_date(data[i].start_date) + "</td>";
+                            output += "<td>" + format_date(data[i].stop_date) + "</td>";
+                            output += "<td><a href='#'>Delete</a></td>";
+                            output += "</tr>";
+                            $("table.list tbody").append(output);
+                       }
+                    },
+                    (error) => {   
+                        message_center("Error fetching periods.", "error");
+                    });
+                </script>
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Start Date</th>
+                            <th>Stop Date</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            {% include "_footer.html" %}
+        </div>
+    </body>
+</html>

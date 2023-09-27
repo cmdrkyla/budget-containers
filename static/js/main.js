@@ -39,6 +39,22 @@ function logout()
     });
 }
 
+function format_date(date)
+{
+    let js_date = new Date(date);
+    // Fun with js dates - using "-" seperators with no time causes the date to be one day off
+    js_date.setDate(js_date.getDate() + 1 );
+    return js_date.getFullYear() + "-" + (js_date.getMonth()+1).toString().padStart(2,0) + "-" + js_date.getDate().toString().padStart(2,0);
+}
+
+function null_to_ws(value)
+{
+    if(value === null)
+        return "&nbsp;"
+    else
+        return value;
+}
+
 // Handlers
 $(document).ready( function()
 {
