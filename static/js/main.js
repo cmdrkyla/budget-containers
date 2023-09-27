@@ -47,6 +47,13 @@ function format_date(date)
     return js_date.getFullYear() + "-" + (js_date.getMonth()+1).toString().padStart(2,0) + "-" + js_date.getDate().toString().padStart(2,0);
 }
 
+function format_number(number)
+{
+    // TODO: toLocaleString isn't working on firefox, hardcoding to US for now
+    let usa_format = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2});
+    return usa_format.format(number);
+}
+
 function null_to_ws(value)
 {
     if(value === null)

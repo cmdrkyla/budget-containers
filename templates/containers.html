@@ -13,7 +13,7 @@
                             let output = "<tr id='id_" + data[i].id + "'>";
                             output += "<td><a href='#'>Edit</a></td>";
                             output += "<td>" + data[i].name + "</td>";
-                            output += "<td>$" + data[i].amount + "</td>";
+                            output += "<td>$" + format_number(data[i].amount) + "</td>";
                             output += "<td>" + data[i].frequency_type + "</td>";
                             output += "<td>" + data[i].frequency_interval + "</td>";
                             output += "<td>" + null_to_ws(data[i].frequency_month_repeat) + "</td>";
