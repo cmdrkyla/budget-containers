@@ -21,7 +21,8 @@ class TestPeriodControllerCreateE2E:
         # When - we create the user
         response = app.test_client().post(
             "/api/period/create",
-            data=period_data,
+            data=json.dumps(period_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data
@@ -57,7 +58,8 @@ class TestPeriodControllerUpdateE2E:
         # When - we update the period
         response = app.test_client().put(
             f"/api/period/update/{period_id}",
-            data=period_data,
+            data=json.dumps(period_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data

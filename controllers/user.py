@@ -10,10 +10,10 @@ class UserController():
     def create() -> dict:
         try:
             user = User()
-            user.email_address = request.form.get("email_address")
-            user.name_first = request.form.get("name_first")
-            user.name_last = request.form.get("name_last")
-            user.password_hash = Password.hash_password(request.form.get("password"))
+            user.email_address = request.json.get("email_address")
+            user.name_first = request.json.get("name_first")
+            user.name_last = request.json.get("name_last")
+            user.password_hash = Password.hash_password(request.json.get("password"))
             db.session.add(user)
             db.session.commit()
             return row_to_dict(user)
@@ -34,14 +34,14 @@ class UserController():
     def update(id) -> dict:
         try:
             user = db.session.query(User).filter(User.id == id).one()
-            if request.form.get("email_address"):
-                user.email_address = request.form.get("email_address")
-            if request.form.get("name_first"):
-                user.name_first = request.form.get("name_first")
-            if request.form.get("name_last"):
-                user.name_last = request.form.get("name_last")
-            if request.form.get("password"):
-                user.password_hash = Password.hash_password(request.form.get("password"))
+            if request.json.get("email_address"):
+                user.email_address = request.json.get("email_address")
+            if request.json.get("name_first"):
+                user.name_first = request.json.get("name_first")
+            if request.json.get("name_last"):
+                user.name_last = request.json.get("name_last")
+            if request.json.get("password"):
+                user.password_hash = Password.hash_password(request.json.get("password"))
             db.session.add(user)
             db.session.commit()
             return row_to_dict(user)

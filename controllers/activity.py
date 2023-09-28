@@ -45,20 +45,20 @@ class ActivityController():
     def update(id) -> dict:
         try:
             activity = db.session.query(Activity).filter(Activity.id == id).one()
-            if request.form.get("activity_date"):
+            if request.json.get("activity_date"):
                 activity.activity_date = datetime.strptime(
-                    request.form.get("activity_date"), "%Y-%m-%d"
+                    request.json.get("activity_date"), "%Y-%m-%d"
                 )
-            if request.form.get("amount"):
-                activity.amount = request.form.get("amount")
-            if request.form.get("container_id"):
-                activity.container_id = int(request.form.get("container_id"))
-            if request.form.get("description"):
-                activity.description = request.form.get("description")
-            if request.form.get("period_id"):
-                activity.period_id = int(request.form.get("period_id"))
-            if request.form.get("user_id"):
-                activity.user_id = request.form.get("user_id")
+            if request.json.get("amount"):
+                activity.amount = request.json.get("amount")
+            if request.json.get("container_id"):
+                activity.container_id = int(request.json.get("container_id"))
+            if request.json.get("description"):
+                activity.description = request.json.get("description")
+            if request.json.get("period_id"):
+                activity.period_id = int(request.json.get("period_id"))
+            if request.json.get("user_id"):
+                activity.user_id = request.json.get("user_id")
             db.session.add(activity)
             db.session.commit()
             return row_to_dict(activity)

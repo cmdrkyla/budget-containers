@@ -12,22 +12,22 @@ class ContainerController():
     def create() -> dict:
         try:
             container = Container()
-            container.amount = request.form.get("amount")
-            container.frequency_interval = int(request.form.get("frequency_interval"))
-            if request.form.get("frequency_month_repeat"):
+            container.amount = request.json.get("amount")
+            container.frequency_interval = int(request.json.get("frequency_interval"))
+            if request.json.get("frequency_month_repeat"):
                 container.frequency_month_repeat = FrequencyMonthRepeat(
-                    request.form.get("frequency_month_repeat")
+                    request.json.get("frequency_month_repeat")
                 ).name
-            container.frequency_type = FrequencyType(request.form.get("frequency_type")).name
-            if request.form.get("frequency_week_repeat"):
+            container.frequency_type = FrequencyType(request.json.get("frequency_type")).name
+            if request.json.get("frequency_week_repeat"):
                 container.frequency_week_repeat = FrequencyWeekRepeat(
-                    request.form.get("frequency_week_repeat")
+                    request.json.get("frequency_week_repeat")
                 ).name
-            container.name = request.form.get("name")
+            container.name = request.json.get("name")
             container.start_date = datetime.strptime(
-                request.form.get("start_date"), "%Y-%m-%d"
+                request.json.get("start_date"), "%Y-%m-%d"
             )
-            container.user_id = int(request.form.get("user_id"))
+            container.user_id = int(request.json.get("user_id"))
             db.session.add(container)
             db.session.commit()
             return row_to_dict(container)
@@ -48,28 +48,28 @@ class ContainerController():
     def update(id) -> dict:
         try:
             container = db.session.query(Container).filter(Container.id == id).one()
-            if request.form.get("amount"):
-                container.amount = request.form.get("amount")
-            if request.form.get("frequency_interval"):
-                container.frequency_interval = int(request.form.get("frequency_interval"))
-            if request.form.get("frequency_month_repeat"):
+            if request.json.get("amount"):
+                container.amount = request.json.get("amount")
+            if request.json.get("frequency_interval"):
+                container.frequency_interval = int(request.json.get("frequency_interval"))
+            if request.json.get("frequency_month_repeat"):
                 container.frequency_month_repeat = FrequencyMonthRepeat(
-                    request.form.get("frequency_month_repeat")
+                    request.json.get("frequency_month_repeat")
                 ).name
-            if request.form.get("frequency_type"):
-                container.frequency_type = FrequencyType(request.form.get("frequency_type")).name
-            if request.form.get("frequency_week_repeat"):
+            if request.json.get("frequency_type"):
+                container.frequency_type = FrequencyType(request.json.get("frequency_type")).name
+            if request.json.get("frequency_week_repeat"):
                 container.frequency_week_repeat = FrequencyWeekRepeat(
-                    request.form.get("frequency_week_repeat")
+                    request.json.get("frequency_week_repeat")
                 ).name
-            if request.form.get("name"):
-                container.name = request.form.get("name")
-            if request.form.get("start_date"):
+            if request.json.get("name"):
+                container.name = request.json.get("name")
+            if request.json.get("start_date"):
                 container.start_date = datetime.strptime(
-                    request.form.get("start_date"), "%Y-%m-%d"
+                    request.json.get("start_date"), "%Y-%m-%d"
                 )
-            if request.form.get("user_id"):
-                container.user_id = int(request.form.get("user_id"))
+            if request.json.get("user_id"):
+                container.user_id = int(request.json.get("user_id"))
             db.session.add(container)
             db.session.commit()
             return row_to_dict(container)

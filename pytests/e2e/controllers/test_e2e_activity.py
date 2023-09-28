@@ -16,7 +16,7 @@ class TestActivityControllerCreateE2E:
         container = user_with_records["container"]
         period = user_with_records["period"]
         activity_data = {
-            "activity_date": date_utcnow(),
+            "activity_date": date_utcnow().strftime("%Y-%m-%d"),
             "amount": 10.01,
             "container_id": container.id,
             "period_id": period.id,
@@ -27,7 +27,8 @@ class TestActivityControllerCreateE2E:
         # When - we create the user
         response = app.test_client().post(
             "/api/activity/create",
-            data=activity_data,
+            data=json.dumps(activity_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data
@@ -63,7 +64,8 @@ class TestActivityControllerUpdateE2E:
         # When - we update the activity
         response = app.test_client().put(
             f"/api/activity/update/{activity_id}",
-            data=activity_data,
+            data=json.dumps(activity_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data

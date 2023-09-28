@@ -26,7 +26,8 @@ class TestContainerControllerCreateE2E:
         # When - we create the user
         response = app.test_client().post(
             "/api/container/create",
-            data=container_data,
+            data=json.dumps(container_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data
@@ -62,7 +63,8 @@ class TestContainerControllerUpdateE2E:
         # When - we update the container
         response = app.test_client().put(
             f"/api/container/update/{container_id}",
-            data=container_data,
+            data=json.dumps(container_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data

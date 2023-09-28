@@ -11,12 +11,12 @@ class PeriodController():
         try:
             period = Period()
             period.start_date = datetime.strptime(
-                request.form.get("start_date"), "%Y-%m-%d"
+                request.json.get("start_date"), "%Y-%m-%d"
             )
             period.stop_date = datetime.strptime(
-                request.form.get("stop_date"), "%Y-%m-%d"
+                request.json.get("stop_date"), "%Y-%m-%d"
             )
-            period.user_id = int(request.form.get("user_id"))
+            period.user_id = int(request.json.get("user_id"))
             db.session.add(period)
             db.session.commit()
             return row_to_dict(period)
@@ -37,16 +37,16 @@ class PeriodController():
     def update(id) -> dict:
         try:
             period = db.session.query(Period).filter(Period.id == id).one()
-            if request.form.get("start_date"):
+            if request.json.get("start_date"):
                 period.start_date = datetime.strptime(
-                    request.form.get("start_date"), "%Y-%m-%d"
+                    request.json.get("start_date"), "%Y-%m-%d"
                 )
-            if request.form.get("stop_date"):
+            if request.json.get("stop_date"):
                 period.stop_date = datetime.strptime(
-                    request.form.get("stop_date"), "%Y-%m-%d"
+                    request.json.get("stop_date"), "%Y-%m-%d"
                 )
-            if request.form.get("user_id"):
-                period.user_id = int(request.form.get("user_id"))
+            if request.json.get("user_id"):
+                period.user_id = int(request.json.get("user_id"))
             db.session.add(period)
             db.session.commit()
             return row_to_dict(period)

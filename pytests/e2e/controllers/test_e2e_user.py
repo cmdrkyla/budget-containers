@@ -21,7 +21,8 @@ class TestUserControllerCreateE2E:
         # When - we create the user
         response = app.test_client().post(
             "/api/user/create",
-            data=user_data,
+            data=json.dumps(user_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data
@@ -58,7 +59,8 @@ class TestUserControllerUpdateE2E:
         # When - we update the user
         response = app.test_client().put(
             f"/api/user/update/{random_user.id}",
-            data=user_data,
+            data=json.dumps(user_data),
+            content_type='application/json',
         )
 
         # Then - success status code and valid data
