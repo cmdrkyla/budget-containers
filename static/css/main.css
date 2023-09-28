@@ -55,6 +55,13 @@ header h1 {
 #main_content > h2 {
     text-align: center;
 }
+#main_content > h2 .new {
+    background-color: #72bc72;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
 
 #main_content a {
     color: #72bc72;
@@ -78,6 +85,19 @@ header h1 {
 }
 #main_content table.list .template {
     display: none;
+}
+
+#main_content table.form {
+    margin: 0 auto;
+    display: none;
+}
+#main_content table.form .form_buttons {
+    text-align: center;
+}
+#main_content table.form .form_buttons input {
+    padding: 3px 5px;
+    cursor: pointer;
+    margin: 10px;
 }
 
 footer {

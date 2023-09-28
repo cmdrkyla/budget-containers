@@ -1,5 +1,6 @@
 from datetime import datetime
-from flask import jsonify, request
+from decimal import Decimal
+from flask import jsonify, request, session
 from sqlalchemy.sql import func
 
 import app
@@ -11,13 +12,19 @@ class ActivityController():
         try:
             activity = Activity()
             activity.activity_date = datetime.strptime(
-                request.form.get("activity_date"), "%Y-%m-%d"
+                request.json.get("activity_date"), "%Y-%m-%d"
             )
-            activity.amount = request.form.get("amount")
-            activity.container_id = request.form.get("container_id")
-            activity.description = request.form.get("description", "")
-            activity.period_id = request.form.get("period_id")
-            activity.user_id = request.form.get("user_id")
+            activity.amount = Decimal(request.json.get("amount"))
+            activity.container_id = request.json.get("container_id")
+            activity.description = request.json.get("description")
+            if request.json.get("period_id"):
+                activity.period_id = request.json.get("period_id")
+            activity.user_id = session["auth"]["user_id"]
+
+            # Get the period if need be
+            if not activity.period_id:
+                # TODO: get the period from the activity_date
+                activity.period_id = 1
             db.session.add(activity)
             db.session.commit()
             return row_to_dict(activity)
@@ -76,7 +83,7 @@ class ActivityController():
         try:
             activities = db.session.query(Activity).filter(
                 Activity.deactivated_at == None
-            ).order_by(Activity.activity_date).all()
+            ).order_by(Activity.activity_date.desc()).all()
             return rows_to_list(activities)
         except Exception as ex:
             app.app.logger.error(f"Error listing records: {str(ex)}")

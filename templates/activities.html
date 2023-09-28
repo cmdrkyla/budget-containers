@@ -5,25 +5,84 @@
         <div id="root">
             {% include "_header.html" %}
             <div id="main_content">
-                <h2>Activities</h2>
+                <h2>Activities <span class="new show_form">+</span></h2>
                 <script>
-                    api_request("activity/list").then((data) => {
-                       for(i=0; i<data.length; i++)
-                       {
-                            let output = "<tr id='id_" + data[i].id + "'>";
-                            output += "<td><a href='#'>Edit</a></td>";
-                            output += "<td>" + format_date(data[i].activity_date) + "</td>";
-                            output += "<td>$" + data[i].amount + "</td>";
-                            output += "<td>" + data[i].description + "</td>";
-                            output += "<td><a href='#'>Delete</a></td>";
-                            output += "</tr>";
-                            $("table.list tbody").append(output);
-                       }
-                    },
-                    (error) => {   
-                        message_center("Error fetching activities.", "error");
+                    $(document).ready(function()
+                    {
+                        // List
+                        api_request("activity/list").then((data) => {
+                            for(i=0; i<data.length; i++)
+                            {
+                                    let output = "<tr id='id_" + data[i].id + "'>";
+                                    output += "<td><a href='#'>Edit</a></td>";
+                                    output += "<td>" + format_date(data[i].activity_date) + "</td>";
+                                    output += "<td>$" + data[i].amount + "</td>";
+                                    output += "<td>" + data[i].description + "</td>";
+                                    output += "<td><a href='#'>Delete</a></td>";
+                                    output += "</tr>";
+                                    $("table.list tbody").append(output);
+                            }
+                        },
+                        (error) => {   
+                            message_center("Error fetching records.", "error");
+                        });
+
+                        // Save
+                        $("#form_save").click(function()
+                        {
+                            let record = {}
+                            record.activity_date = $("#field_activity_date").val();
+                            record.amount = $("#field_amount").val();
+                            record.container_id = $("#field_container_id").val();
+                            record.description = $("#field_description").val();
+                            api_request("activity/create", record, "POST").then((response) => {
+                                window.location.reload()
+                            },
+                            (error) => {
+                                message_center("Error saving record.", "error");
+                            });
+                        });
+
+                        // Fill out the default date
+                        $("#field_activity_date").val(format_date());
+
+                        // Query the containers
+                        api_request("container/list").then((response) => {
+                            $("#field_container_id").html(select_options(response, "id", "name"));
+                        },
+                        (error) => {
+                            console.log("Error fetching options for select");
+                        });
                     });
                 </script>
+
+                <table class="form">
+                    <tbody>
+                        <tr>
+                            <td>Date:</td>
+                            <td><input type="date" id="field_activity_date" /></td>
+                        </tr>
+                        <tr>
+                            <td>Container:</td>
+                            <td><select id="field_container_id"></select></td>
+                        </tr>
+                        <tr>
+                            <td>Amount:</td>
+                            <td><input type="number" id="field_amount" /></td>
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td><input type="text" id="field_description" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="form_buttons">
+                                <input type="button" value="Save" id="form_save" />
+                                <input type="button" value="Cancel" id="form_cancel" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <table class="list">
                     <thead>
                         <tr>

@@ -39,11 +39,18 @@ function logout()
     });
 }
 
-function format_date(date)
+function format_date(date = null)
 {
-    let js_date = new Date(date);
-    // Fun with js dates - using "-" seperators with no time causes the date to be one day off
-    js_date.setDate(js_date.getDate() + 1 );
+    
+    let js_date;
+    if(date === null)
+        js_date = new Date()
+    else
+    {
+        // Fun with js dates - using "-" seperators with no time causes the date to be one day off
+        js_date = new Date(date);
+        js_date.setDate(js_date.getDate() + 1 );
+    }
     return js_date.getFullYear() + "-" + (js_date.getMonth()+1).toString().padStart(2,0) + "-" + js_date.getDate().toString().padStart(2,0);
 }
 
@@ -60,6 +67,20 @@ function null_to_ws(value)
         return "&nbsp;"
     else
         return value;
+}
+
+function select_options(data, value_field, label_field, default_value=null, include_blank=true)
+{
+    let options = "";
+    let selected = ""
+    if(include_blank)
+        options += "<option value=''></option>";
+    for(i=0; i<data.length; i++)
+    {
+        selected = (data[i][value_field] == default_value) ? "selected" : "";
+        options += "<option value='" + data[i][value_field] + "' " + selected + ">" + data[i][label_field] + "</option>";
+    }
+    return options;
 }
 
 // Handlers
@@ -89,4 +110,15 @@ $(document).ready( function()
         event.preventDefault();
         logout();
     });
+
+    // Show form
+    $("#main_content .show_form").click(function()
+    {
+        $("#main_content table.form").show(300);
+    });
+    // Cancel form
+    $("#form_cancel").click(function()
+    {
+        $("#main_content table.form").hide(300);
+    }); 
 });
