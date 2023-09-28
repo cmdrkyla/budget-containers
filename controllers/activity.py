@@ -4,6 +4,7 @@ from flask import jsonify, request, session
 from sqlalchemy.sql import func
 
 import app
+from auth.auth import Auth
 from database.database import db, row_to_dict, rows_to_list
 from models.activity import Activity
 
@@ -19,7 +20,7 @@ class ActivityController():
             activity.description = request.json.get("description")
             if request.json.get("period_id"):
                 activity.period_id = request.json.get("period_id")
-            activity.user_id = session["auth"]["user_id"]
+            activity.user_id = Auth.get_session_user_id()
 
             # Get the period if need be
             if not activity.period_id:

@@ -7,9 +7,10 @@ from auth.auth import Auth
 from imports.functions import date_utcnow
 
 @mock.patch.object(Auth, "is_authenticated")
+@mock.patch("auth.auth.Auth.get_session_user_id")
 class TestActivityControllerCreateE2E:
     def test__activity_controller_create(
-            self, mock_auth_authenticate, user_with_records
+            self, mock_session_user_id, mock_auth_authenticate, user_with_records
         ):
         # Given - an activity to add
         user = user_with_records["user"]
@@ -23,6 +24,7 @@ class TestActivityControllerCreateE2E:
             "user_id": user.id,
         }
         mock_auth_authenticate.return_value = True
+        mock_session_user_id.return_value = user.id
 
         # When - we create the user
         response = app.test_client().post(

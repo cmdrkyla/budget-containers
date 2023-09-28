@@ -133,3 +133,11 @@ class Auth():
             return True
         except:
             return False
+        
+    
+    @classmethod
+    def get_session_user_id(self):
+        if "auth" in session and "user_id" in session["auth"]:
+            return session["auth"]["user_id"]
+        else:
+            return None
