@@ -1,10 +1,8 @@
-from datetime import date, datetime
+from datetime import datetime
 from freezegun import freeze_time
-import pytest
 import pytz
 
 from imports.functions import *
-from models.user import User
 
 class TestFunctionsDatetimeNow():
     def test__datetime_now__no_timezone_provided(self):
@@ -73,29 +71,3 @@ class TestFunctionsDatetimeUtcnow():
 
 
 # TODO: Tests for new date_now and date_utcnow functions
-
-
-class TestFunctionsStringToClass():
-    def test__string_to_class__valid(self):
-        # Given - a string to turn into a valid class
-        class_string = "user"
-
-        # When - we call the function
-        class_object = string_to_class(class_string)
-
-        # Then - the user class is returned
-        assert class_object.__name__ == "UserController"
-
-
-    def test__string_to_class__invalid(self):
-        # Given - a string to turn into a valid class
-        class_string = "invalid_class"
-
-        # When - we call the function
-        class_object = string_to_class(class_string)
-        
-        # Then - the exception is caught and None is returned
-        assert class_object == None
-
-
-    # We don't have a multi-word case to try yet

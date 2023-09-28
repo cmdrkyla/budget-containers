@@ -1,8 +1,13 @@
 from flask import abort, Blueprint, jsonify, render_template
+from sys import modules
 
+import app
 from auth.auth import Auth
 from auth.route import secure_route
-from imports.functions import string_to_class
+from controllers.activity import ActivityController
+from controllers.container import ContainerController
+from controllers.period import PeriodController
+from controllers.user import UserController
 
 class Blueprint_Auth():
     blueprint = Blueprint("blueprint_auth", __name__)
@@ -23,7 +28,7 @@ class Blueprint_Auth():
         return jsonify({"is_authenticated": Auth.is_authenticated()})
 
 
-# Crudl based routing
+# Crudl model based routing
 class Blueprint_Models():
     blueprint = Blueprint("blueprint_models", __name__)
 
@@ -116,3 +121,18 @@ class Blueprint_Frontend():
     @blueprint.route("/user")
     def user() -> any:
         return render_template("user.html")
+    
+
+# String to class object (for routing to correct module)
+# TODO: Should I keep this or hardcode the routes in....
+def string_to_class(class_string:str) -> object:
+    # Turn snake_case to HeadedCamelCase first 
+    class_pieces = class_string.split("_")
+    model_name = "".join(piece.title() for piece in class_pieces)
+    controller_name = model_name + "Controller"
+    try:
+        class_object = getattr(modules[__name__], controller_name)
+        return class_object
+    except AttributeError:
+        app.app.logger.debug(f"Invalid module or controller: class_string={class_string}")
+        return None
